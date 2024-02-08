@@ -50,7 +50,22 @@
             <label>Parola: </label>
             <input id="passwordInput">
             <br>
-            <button>Intra in cont</button>
+            <button onclick="OnLogin()">Intra in cont</button>
         </div>
+
+        <script>
+                function OnLogin() {
+                let email = document.getElementById("email").value
+                let response = fetch("http://localhost:8080/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(email),
+                });
+                console.log(response)
+                window.open("http://localhost:8080/"+email)
+            }
+        </script>
     </body>
 </html>
