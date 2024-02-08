@@ -1,7 +1,7 @@
 package main
 
 type Admin struct {
-	email  string
-	nume   string
-	parola string
+	Email  string
+	Nume   string
+	Parola string
 }

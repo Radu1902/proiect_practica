@@ -55,17 +55,19 @@
 
         <script>
                 function OnLogin() {
-                let email = document.getElementById("email").value
-                let response = fetch("http://localhost:8080/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(email),
-                });
-                console.log(response)
-                window.open("http://localhost:8080/"+email)
-            }
+                    let email = document.getElementById("emailInput").value
+                    let parola = document.getElementById("passwordInput").value
+                    let credentials = email + "," + parola
+                    let response = fetch("http://localhost:8080/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(credentials),
+                    });
+                    console.log(response)
+                    window.open("http://localhost:8080/student")
+                }
         </script>
     </body>
 </html>
