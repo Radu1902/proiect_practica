@@ -3,36 +3,112 @@
 <html>
     <head>
         <style>
-            html {
+            /* html {
                 display: table;
-                margin: auto;
-            }
+                margin: 50px;
+            } */
 
-            body {
+            /* body {
                 display: table-cell;
                 vertical-align: center;
+            } */
+            h1 {
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
             }
+
+            div {
+                background-color: lightgrey;
+                width: 300px;
+                border: 3px solid black;
+                padding: 50px;
+                margin: 50px;
+            }
+
             table, th, td {
                 border: 2px solid black;
                 border-collapse: collapse;
-            }
-            div {
-              background-color: lightgrey;
-              width: 300px;
-              border: 3px solid black;
-              padding: 50px;
-              margin: 20px;
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                font-size: larger;
             }
         </style>
 
     </head>
     <body>
-        <div>
-            <label>Email: </label>
-            <input id="emailInput">
-            <br>
-            <label>Password: </label>
-            <input id="passwordInput">
-        </div>
+        <title>Admin evidenta practica</title>
+        <h1>Evidenta practica admin</h1>
+        <table id="studentsDisplay" style="width:100%">
+            <tr>
+                <td>Nume Student</td>
+                <td>Email Student</td>
+                <td>Grupa</td>
+                <td>Specializare</td>
+                <td>Firma</td>
+                <td>Start date</td>
+                <td>End date</td>
+            </tr>
+        </table>
+
+        <script>
+            let email = location.pathname
+            email = email.slice(1)
+            function OnConnect() {
+                console.log(email)
+
+                let studentDisplay = document.getElementById("studentsDisplay")
+                let tableBody = document.createElement("tbody")
+                const promise = fetch("http://localhost:8080/"+email+"/studenti")
+                promise.then((response) => {
+                    let data = response.text()
+                    data.then((value) => {
+                        console.log(value)
+                        let students = JSON.parse(value)
+                        let count = Object.keys(students).length
+                        for (let i = 0; i < count; i++) {
+                            let row = document.createElement("tr")
+                            console.log(students[i])
+                            let cell = document.createElement("td")
+                            let cellText = document.createTextNode(students[i].Nume)
+                            cell.appendChild(cellText)
+                            row.appendChild(cell)
+
+                            cell = document.createElement("td")
+                            cellText = document.createTextNode(students[i].Email)
+                            cell.appendChild(cellText)
+                            row.appendChild(cell)
+
+                            cell = document.createElement("td")
+                            cellText = document.createTextNode(students[i].Grupa)
+                            cell.appendChild(cellText)
+                            row.appendChild(cell)
+
+                            cell = document.createElement("td")
+                            cellText = document.createTextNode(students[i].Specializare)
+                            cell.appendChild(cellText)
+                            row.appendChild(cell)
+
+                            cell = document.createElement("td")
+                            cellText = document.createTextNode(students[i].Firma)
+                            cell.appendChild(cellText)
+                            row.appendChild(cell)
+
+                            cell = document.createElement("td")
+                            cellText = document.createTextNode(students[i].Start_date)
+                            cell.appendChild(cellText)
+                            row.appendChild(cell)
+
+                            cell = document.createElement("td")
+                            cellText = document.createTextNode(students[i].End_date)
+                            cell.appendChild(cellText)
+                            row.appendChild(cell)
+
+                            tableBody.appendChild(row)
+                        }
+                        
+                    })
+                })
+                studentDisplay.appendChild(tableBody)
+            }
+            OnConnect()
+        </script>
     </body>
 </html>

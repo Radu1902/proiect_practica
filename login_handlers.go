@@ -35,8 +35,8 @@ func (catalog *Catalog) loginHandler(w http.ResponseWriter, r *http.Request) {
 		if parola == parolaAdmin {
 			// serveMux.HandleFunc("/admin", serveAdmin)
 			// serveMux.HandleFunc("/admin/studenti", catalog.getStudentList)
-			http.HandleFunc("/"+email, serveStudent)
-			http.HandleFunc("/"+email+"/info", catalog.getStudentInfo)
+			http.HandleFunc("/"+email, serveAdmin)
+			http.HandleFunc("/"+email+"/studenti", catalog.getStudentList)
 		} else {
 			fmt.Println("Parola gresita")
 		}
