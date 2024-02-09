@@ -30,7 +30,7 @@ func main() {
 	catalog := &Catalog{db: db}
 
 	http.HandleFunc("/", serveLogin)
-	http.HandleFunc("/login", catalog.loginHandler)
+	http.HandleFunc("/credentials", catalog.loginHandler)
 
 	http.ListenAndServe(":8080", nil)
 }

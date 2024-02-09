@@ -17,6 +17,7 @@ func serveLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (catalog *Catalog) loginHandler(w http.ResponseWriter, r *http.Request) {
+
 	decoder := json.NewDecoder(r.Body)
 	var body any
 	decoder.Decode(&body)
@@ -32,15 +33,21 @@ func (catalog *Catalog) loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	if parolaAdmin != "" {
 		if parola == parolaAdmin {
-			http.HandleFunc("/admin", serveAdmin)
-			http.HandleFunc("/admin/studenti", catalog.getStudentList)
+			// serveMux.HandleFunc("/admin", serveAdmin)
+			// serveMux.HandleFunc("/admin/studenti", catalog.getStudentList)
+			http.HandleFunc("/"+email, serveStudent)
+			http.HandleFunc("/"+email+"/info", catalog.getStudentInfo)
 		} else {
 			fmt.Println("Parola gresita")
 		}
 	} else if parolaStudent != "" {
 		if parola == parolaStudent {
-			http.HandleFunc("/student", serveStudent)
-			http.HandleFunc("/student/info", catalog.getStudentInfo(email))
+			// serveMux.HandleFunc("/student", serveStudent)
+			// serveMux.HandleFunc("/student/info", catalog.getStudentInfo(email))
+			http.HandleFunc("/"+email, serveStudent)
+			http.HandleFunc("/"+email+"/info", catalog.getStudentInfo)
+			http.HandleFunc("/"+email+"/update", catalog.updateStudent)
+			http.HandleFunc("/"+email+"/remove", catalog.removeStudent)
 		} else {
 			fmt.Println("Parola gresita")
 		}

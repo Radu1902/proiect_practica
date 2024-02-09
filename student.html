@@ -56,8 +56,33 @@
             <br>
             <label>Data de sfarsit: </label>
             <label id="endDisplay"></label>
+            <br>
+            <br>
+            <button id="dialogStarter" onclick="OpenDialog()">Adauga practica</button>
+            <button id="deleter" onclick="RemovePractica()">Sterge practica</button>
         </div>
+
+        <dialog id="updateDialog">
+            <label>Firma: </label>
+            <input id="firmaInput" type="text"></label>
+            <br>
+            <br>
+            <label>Data de inceput: </label>
+            <input id="startInput" type="date"></label>
+            <br>
+            <br>
+            <label>Data de sfarsit: </label>
+            <input id="endInput" type="date">
+            <br>
+            <br>
+            <button id="saver" onclick="UpdatePractica()">Salveaza</button>
+            <button id="dialogEnder" onclick="CloseDialog()">Cancel</button>
+
+        </dialog>
+
         <script>
+            let email = location.pathname
+            email = email.slice(1)
             function OnConnect() {
                 let emailDisplay = document.getElementById("emailDisplay")
                 let grupaDisplay = document.getElementById("grupaDisplay")
@@ -66,7 +91,7 @@
                 let startDisplay = document.getElementById("startDisplay")
                 let endDisplay = document.getElementById("endDisplay")
 
-                const promise = fetch("http://localhost:8080/student/info")
+                const promise = fetch("http://localhost:8080/" + email + "/info")
                 promise.then((response) => {
                     let data = response.text()
                     data.then((value) => {
@@ -87,11 +112,59 @@
                             startDisplay.innerHTML = student.Start_date
                             endDisplay.innerHTML = student.End_date
                         }
-
-                        
                     })
                 })
-                // gradeDisplay.appendChild(tableBody)
+            }
+            function OpenDialog() {
+                const dialog = document.getElementById("updateDialog")
+                dialog.showModal()
+            }
+
+            function CloseDialog() {
+                const dialog = document.getElementById("updateDialog")
+                dialog.close()
+            }
+
+            function UpdatePractica() {
+                const firma = document.getElementById("firmaInput").value
+                const startDate = document.getElementById("startInput").value
+                const endDate = document.getElementById("endInput").value
+                
+                if (firma === null || firma == "") {
+                    alert("campul 'firma' nu poate sa fie gol")
+                    return
+                }
+                if (startDate >= endDate) {
+                    alert("data de sfarsit este mai devreme decat cea de inceput")
+                    return
+                }
+
+                let datePractica = firma + "," + startDate + "," + endDate
+
+                let response = fetch("http://localhost:8080/"+email+"/update", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(datePractica),
+                });
+                document.getElementById("updateDialog").close()
+
+                console.log(datePractica)
+            }
+
+            function RemovePractica() {
+                if (confirm("Sigur doresti sa stergi datele de practica?") == true) {
+                    let response = fetch("http://localhost:8080/"+email+"/remove", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(true),
+                    });
+                } else {
+                    return
+                }
             }
             OnConnect()
         </script>
